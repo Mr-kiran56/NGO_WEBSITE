@@ -64,7 +64,7 @@ export const blogApi = {
 export const galleryApi = {
   getAll: (params?: unknown) => api.get("/api/gallery", { params }),
   upload: (formData: FormData) =>
-    api.post("/api/gallery/upload", formData, { headers: { "Content-Type": "multipart/form-data" } }),
+    api.post("/api/gallery", formData, { headers: { "Content-Type": "multipart/form-data" } }),
   delete: (id: string) => api.delete(`/api/gallery/${id}`),
 }
 
