@@ -87,14 +87,29 @@
 
   .hero-gradient {
     background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3) 0%,
-      rgba(0, 0, 0, 0.5) 50%,
-      rgba(0, 0, 0, 0.7) 100%
+      160deg,
+      rgba(20, 8, 2, 0.55) 0%,
+      rgba(232, 83, 10, 0.18) 40%,
+      rgba(10, 5, 2, 0.72) 100%
     );
   }
 
   .section-padding {
     @apply py-16 md:py-24;
   }
+
+  /* Premium scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: #E8530A; }
+
+  /* Smooth focus ring */
+  :focus-visible { outline: 2px solid #E8530A; outline-offset: 2px; border-radius: 4px; }
+
+  /* Selection color */
+  ::selection { background: rgba(232, 83, 10, 0.25); color: inherit; }
 }

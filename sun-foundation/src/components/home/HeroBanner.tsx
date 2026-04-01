@@ -33,15 +33,16 @@ export default function HeroBanner() {
         <img
           src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=1920&q=80"
           alt="Community volunteers working together"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center scale-[1.02]"
         />
-        <div className="absolute inset-0 hero-gradient" />
-        <div className="absolute inset-0 bg-saffron-900/20" />
+        {/* Rich multi-layer overlay for premium depth */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-saffron-950/30 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
       </div>
 
       {/* Main content */}
       <div className="relative flex-1 flex items-center">
-        <div className="container max-w-7xl mx-auto px-4 pt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[68px]">
           <motion.div
             className="max-w-3xl"
             initial={{ opacity: 0 }}

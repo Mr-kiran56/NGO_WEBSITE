@@ -31,9 +31,9 @@ adminSchema.methods.comparePassword = async function (candidate: string): Promis
 
 // Never return password in JSON responses
 adminSchema.set('toJSON', {
-  transform: (_doc, ret: Record<string, unknown>) => {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete ret['password']
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  transform: (_doc: any, ret: any) => {
+    delete ret.password
     return ret
   },
 })
