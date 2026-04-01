@@ -53,11 +53,11 @@ export const donationApi = {
 
 // Blog APIs
 export const blogApi = {
-  getAll: (params?: unknown) => api.get("/api/blog", { params }),
-  getBySlug: (slug: string) => api.get(`/api/blog/${slug}`),
-  create: (data: unknown) => api.post("/api/blog", data),
-  update: (id: string, data: unknown) => api.put(`/api/blog/${id}`, data),
-  delete: (id: string) => api.delete(`/api/blog/${id}`),
+  getAll: (params?: unknown) => api.get("/api/blogs", { params }),
+  getBySlug: (slug: string) => api.get(`/api/blogs/${slug}`),
+  create: (data: unknown) => api.post("/api/blogs", data),
+  update: (id: string, data: unknown) => api.put(`/api/blogs/${id}`, data),
+  delete: (id: string) => api.delete(`/api/blogs/${id}`),
 }
 
 // Gallery APIs

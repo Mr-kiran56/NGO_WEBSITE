@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 import PageHero from '@/components/shared/PageHero'
+import { contactApi } from '@/services/api'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -59,10 +60,21 @@ export default function Contact() {
     },
   })
 
+  // Map frontend enum values to backend expected values
+  const subjectMap: Record<string, string> = {
+    general: 'General Inquiry',
+    volunteer: 'Volunteer Opportunities',
+    partnership: 'Partnership',
+    donations: 'Donations',
+    media: 'Media & Press',
+  }
+
   const onSubmit = async (data: ContactFormData) => {
     try {
-      console.log('Contact form:', data)
-      await new Promise(r => setTimeout(r, 800))
+      await contactApi.submit({
+        ...data,
+        subject: subjectMap[data.subject] ?? data.subject,
+      })
       toast.success('Message sent! We\'ll get back to you within 24 hours.', {
         description: `Thank you, ${data.firstName}. Our team will reach out soon.`,
       })

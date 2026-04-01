@@ -1,14 +1,24 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { ChevronDown, Heart, Users } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronDown, Heart, Users, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCountUp } from '@/hooks/useCountUp'
 
+// Real SUN Foundation images
+const heroImages = [
+  { src: 'https://studentunionfornation.org/sunimages/sun1.jpg',  caption: 'Empowering Communities' },
+  { src: 'https://studentunionfornation.org/sunimages/sun4.jpg',  caption: 'Serving with Heart' },
+  { src: 'https://studentunionfornation.org/sunimages/sun8.jpg',  caption: 'Education for All' },
+  { src: 'https://studentunionfornation.org/sunimages/sun12.jpg', caption: 'Healthcare Drives' },
+  { src: 'https://studentunionfornation.org/sunimages/sun16.jpg', caption: 'Together We Rise' },
+]
+
 const stats = [
   { value: 50000, label: 'Lives Touched', suffix: '+', icon: Heart },
-  { value: 500, label: 'Volunteers', suffix: '+', icon: Users },
-  { value: 150, label: 'K Raised', prefix: '₹', suffix: 'K', icon: null },
-  { value: 15, label: 'Events', suffix: '+', icon: null },
+  { value: 500,   label: 'Volunteers',    suffix: '+', icon: Users },
+  { value: 150,   label: 'K Raised',      prefix: '₹', suffix: 'K', icon: null },
+  { value: 15,    label: 'Events',        suffix: '+', icon: null },
 ]
 
 function StatCounter({ value, label, suffix = '', prefix = '' }: {
@@ -26,22 +36,104 @@ function StatCounter({ value, label, suffix = '', prefix = '' }: {
 }
 
 export default function HeroBanner() {
+  const [current, setCurrent] = useState(0)
+  const [direction, setDirection] = useState(1)
+
+  // Auto-advance every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1)
+      setCurrent(prev => (prev + 1) % heroImages.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const goTo = (index: number) => {
+    setDirection(index > current ? 1 : -1)
+    setCurrent(index)
+  }
+
+  const prev = () => {
+    setDirection(-1)
+    setCurrent(prev => (prev - 1 + heroImages.length) % heroImages.length)
+  }
+
+  const next = () => {
+    setDirection(1)
+    setCurrent(prev => (prev + 1) % heroImages.length)
+  }
+
   return (
-    <section className="relative min-h-screen flex flex-col">
-      {/* Background image */}
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
+
+      {/* Slideshow background */}
       <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=1920&q=80"
-          alt="Community volunteers working together"
-          className="w-full h-full object-cover object-center scale-[1.02]"
-        />
-        {/* Rich multi-layer overlay for premium depth */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-saffron-950/30 to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+        <AnimatePresence mode="sync" initial={false} custom={direction}>
+          <motion.div
+            key={current}
+            custom={direction}
+            className="absolute inset-0"
+            initial={{ opacity: 0, scale: 1.04, x: direction * 30 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.98, x: direction * -30 }}
+            transition={{ duration: 1, ease: 'easeInOut' }}
+          >
+            <img
+              src={heroImages[current].src}
+              alt={heroImages[current].caption}
+              className="w-full h-full object-cover object-center"
+              onError={(e) => {
+                // Fallback to Unsplash if SUN image fails
+                (e.target as HTMLImageElement).src =
+                  'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=80'
+              }}
+            />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Layered gradient overlays for readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/65 via-saffron-950/25 to-black/70 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10" />
+      </div>
+
+      {/* Slideshow controls */}
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20 hidden md:block">
+        <button
+          onClick={prev}
+          className="w-10 h-10 bg-white/15 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-all"
+          aria-label="Previous image"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+      </div>
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 z-20 hidden md:block">
+        <button
+          onClick={next}
+          className="w-10 h-10 bg-white/15 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm transition-all"
+          aria-label="Next image"
+        >
+          <ChevronRight className="w-5 h-5 text-white" />
+        </button>
+      </div>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-36 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {heroImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`rounded-full transition-all duration-300 ${
+              i === current
+                ? 'bg-saffron-400 w-6 h-2'
+                : 'bg-white/40 w-2 h-2 hover:bg-white/60'
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
       </div>
 
       {/* Main content */}
-      <div className="relative flex-1 flex items-center">
+      <div className="relative z-20 flex-1 flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[68px]">
           <motion.div
             className="max-w-3xl"
@@ -49,7 +141,6 @@ export default function HeroBanner() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Tag */}
             <motion.div
               className="inline-flex items-center gap-2 bg-saffron-500/20 border border-saffron-400/30 rounded-full px-4 py-1.5 mb-6"
               initial={{ opacity: 0, y: 20 }}
@@ -102,13 +193,13 @@ export default function HeroBanner() {
 
       {/* Stats bar */}
       <motion.div
-        className="relative bg-black/40 backdrop-blur-sm border-t border-white/10"
+        className="relative z-20 bg-black/50 backdrop-blur-sm border-t border-white/10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
       >
-        <div className="container max-w-7xl mx-auto px-4 py-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-x-0 md:divide-x divide-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:divide-x divide-white/20">
             {stats.map((stat) => (
               <StatCounter
                 key={stat.label}
@@ -124,16 +215,13 @@ export default function HeroBanner() {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-1"
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 hidden md:flex flex-col items-center gap-1"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
       >
         <span className="text-white/40 text-xs font-body">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
+        <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
           <ChevronDown className="w-4 h-4 text-white/40" />
         </motion.div>
       </motion.div>

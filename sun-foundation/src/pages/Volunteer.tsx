@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 import PageHero from '@/components/shared/PageHero'
+import { volunteerApi } from '@/services/api'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -75,11 +76,36 @@ export default function Volunteer() {
     form.setValue('skills', updated)
   }
 
+  // Map frontend kebab-case teams to backend full names
+  const teamMap: Record<string, string> = {
+    'feeding-hands':  'Feeding Hands',
+    'life-saviours':  'Life Saviours',
+    'tech-saala':     'Tech Saala',
+    'elite-queens':   'Elite Queens',
+    'visual-vibes':   'Visual Vibes',
+    'guiding-lights': 'Guiding Lights',
+  }
+
+  const availabilityMap: Record<string, string> = {
+    weekdays: 'Weekdays',
+    weekends: 'Weekends',
+    both:     'Both',
+  }
+
   const onSubmit = async (data: VolunteerFormData) => {
     try {
-      // POST /api/volunteers — mock for now
-      console.log('Volunteer form:', data)
-      await new Promise(r => setTimeout(r, 800))
+      const [city = '', state = ''] = (data.cityState ?? '').split(',').map(s => s.trim())
+      await volunteerApi.submit({
+        fullName:        data.fullName,
+        email:           data.email,
+        phone:           data.phone,
+        city,
+        state,
+        teamPreference:  teamMap[data.team] ?? data.team,
+        whyJoin:         data.whyJoin,
+        skills:          data.skills,
+        availability:    availabilityMap[data.availability] ?? data.availability,
+      })
       setSuccessOpen(true)
       form.reset()
       setSelectedSkills([])
