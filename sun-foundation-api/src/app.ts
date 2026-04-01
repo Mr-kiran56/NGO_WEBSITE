@@ -20,7 +20,7 @@ const app = express()
 // ─── Security & Logging ───────────────────────────────────────────────────────
 app.use(helmet())
 // Strip trailing slash from CORS_ORIGIN so it matches browser-sent origin exactly
-const allowedOrigin = (process.env.CORS_ORIGIN ?? 'http://localhost:5173').replace(/\/$/, '')
+const allowedOrigin = (process.env.CORS_ORIGIN ?? 'https://ngo-website-tan-rho.vercel.app').replace(/\/$/, '')
 
 app.use(
   cors({

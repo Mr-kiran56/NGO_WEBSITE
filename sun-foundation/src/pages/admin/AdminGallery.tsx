@@ -7,9 +7,8 @@ import { galleryApi } from '@/services/api'
 
 interface GalleryImage {
   _id: string
-  title: string
   caption: string
-  imageUrl: string
+  url: string
   category: string
 }
 
@@ -43,7 +42,7 @@ export default function AdminGallery() {
         formData.append('image', file)
         formData.append('title', file.name.replace(/\.[^.]+$/, ''))
         formData.append('caption', '')
-        formData.append('category', 'General')
+        formData.append('category', 'All')
         await galleryApi.upload(formData)
       }
       toast.success(`${files.length} image(s) uploaded`)
@@ -115,14 +114,14 @@ export default function AdminGallery() {
           {images.map((image) => (
             <div key={image._id} className="group relative">
               <div className="aspect-square rounded-lg overflow-hidden bg-muted">
-                <img src={image.imageUrl} alt={image.caption || image.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                <img src={image.url} alt={image.caption} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
               </div>
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => handleDelete(image._id)} className="w-7 h-7 bg-destructive rounded-full flex items-center justify-center shadow-md" aria-label="Delete image">
                   <Trash2 className="w-3.5 h-3.5 text-white" />
                 </button>
               </div>
-              <p className="mt-1.5 text-xs text-muted-foreground truncate px-0.5">{image.caption || image.title}</p>
+              <p className="mt-1.5 text-xs text-muted-foreground truncate px-0.5">{image.caption}</p>
             </div>
           ))}
         </div>

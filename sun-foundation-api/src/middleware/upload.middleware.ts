@@ -41,6 +41,11 @@ export function uploadToCloudinary(folder: string) {
       return
     }
 
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      errorResponse(res, 500, 'Image uploads are not configured. Please set Cloudinary env vars on Render.')
+      return
+    }
+
     try {
       const result = await new Promise<UploadApiResponse>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
