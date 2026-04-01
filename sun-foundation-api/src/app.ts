@@ -17,6 +17,9 @@ import statsRoutes from './routes/stats.routes'
 
 const app = express()
 
+// Trust Render/Vercel/Railway proxy — required for rate-limiting behind load balancers
+app.set('trust proxy', 1)
+
 // ─── Security & Logging ───────────────────────────────────────────────────────
 app.use(helmet())
 // Strip trailing slash from CORS_ORIGIN so it matches browser-sent origin exactly

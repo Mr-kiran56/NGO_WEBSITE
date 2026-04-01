@@ -9,6 +9,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/authStore'
+import { authApi } from '@/services/api'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email'),
@@ -30,15 +31,13 @@ export default function AdminLogin() {
 
   const onSubmit = async (data: LoginData) => {
     try {
-      // Demo: accept admin@sun.org / admin123
-      if (data.email === 'admin@sun.org' && data.password === 'admin123') {
-        setAuth('demo-token-123', { name: 'Admin', email: data.email, role: 'admin' })
-        toast.success('Logged in successfully')
-      } else {
-        toast.error('Invalid credentials. Try admin@sun.org / admin123')
-      }
-    } catch {
-      toast.error('Login failed')
+      const res = await authApi.login(data.email, data.password)
+      const { token, admin } = res.data.data
+      setAuth(token, { name: admin.username, email: admin.email, role: 'admin' })
+      toast.success('Logged in successfully')
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+      toast.error(msg || 'Invalid email or password')
     }
   }
 
@@ -108,7 +107,7 @@ export default function AdminLogin() {
             </form>
           </Form>
           <p className="text-center text-xs text-white/30 mt-4 font-body">
-            Demo: admin@sun.org / admin123
+            Use your admin credentials to sign in
           </p>
         </div>
       </div>
