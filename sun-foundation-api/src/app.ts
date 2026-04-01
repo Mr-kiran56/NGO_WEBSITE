@@ -19,9 +19,20 @@ const app = express()
 
 // ─── Security & Logging ───────────────────────────────────────────────────────
 app.use(helmet())
+// Strip trailing slash from CORS_ORIGIN so it matches browser-sent origin exactly
+const allowedOrigin = (process.env.CORS_ORIGIN ?? 'http://localhost:5173').replace(/\/$/, '')
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true)
+      if (origin === allowedOrigin || origin.replace(/\/$/, '') === allowedOrigin) {
+        callback(null, true)
+      } else {
+        callback(new Error(`CORS: origin ${origin} not allowed`))
+      }
+    },
     credentials: true,
   })
 )
