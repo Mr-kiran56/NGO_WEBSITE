@@ -42,7 +42,6 @@ const volunteerSchema = new Schema<IVolunteer>(
   { timestamps: true }
 )
 
-volunteerSchema.index({ email: 1 })
 volunteerSchema.index({ status: 1 })
 volunteerSchema.index({ teamPreference: 1 })
 
