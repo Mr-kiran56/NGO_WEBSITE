@@ -1,19 +1,28 @@
 import crypto from 'crypto'
-import razorpay from '../config/razorpay'
+import razorpay, { isRazorpayConfigured } from '../config/razorpay'
 
 /**
  * Create a Razorpay order.
- * @param amountInRupees — amount in ₹ (will be converted to paise)
+ * Returns a mock order when Razorpay keys are not configured.
  */
 export async function createRazorpayOrder(
   amountInRupees: number,
   currency: string = 'INR',
   receiptId: string
 ): Promise<{ orderId: string; amount: number; currency: string }> {
+  if (!isRazorpayConfigured || !razorpay) {
+    // Mock order for development / when keys are not set
+    return {
+      orderId: `mock_order_${Date.now()}`,
+      amount: amountInRupees,
+      currency,
+    }
+  }
+
   const order = await razorpay.orders.create({
-    amount: amountInRupees * 100, // Razorpay works in paise
+    amount: amountInRupees * 100,
     currency,
-    receipt: receiptId.slice(0, 40), // Razorpay receipt max 40 chars
+    receipt: receiptId.slice(0, 40),
   })
 
   return {
@@ -25,24 +34,21 @@ export async function createRazorpayOrder(
 
 /**
  * Verify Razorpay payment signature using HMAC-SHA256.
- * razorpay_order_id + "|" + razorpay_payment_id → signed with key_secret
+ * Returns false (instead of throwing) when keys are not configured.
  */
 export function verifyPaymentSignature(
   orderId: string,
   paymentId: string,
   signature: string
 ): boolean {
-  const secret = process.env.RAZORPAY_KEY_SECRET
-  if (!secret) throw new Error('RAZORPAY_KEY_SECRET not configured')
+  if (!isRazorpayConfigured) return false
 
+  const secret = process.env.RAZORPAY_KEY_SECRET!
   const body = `${orderId}|${paymentId}`
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(body)
-    .digest('hex')
+  const expected = crypto.createHmac('sha256', secret).update(body).digest('hex')
 
   return crypto.timingSafeEqual(
-    Buffer.from(expectedSignature, 'hex'),
+    Buffer.from(expected, 'hex'),
     Buffer.from(signature, 'hex')
   )
 }

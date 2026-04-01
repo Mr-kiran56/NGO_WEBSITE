@@ -1,6 +1,7 @@
-import { Schema, model, Document } from 'mongoose'
+import { Schema, model, Document, Types } from 'mongoose'
 
 export interface IDonation extends Document {
+  _id: Types.ObjectId
   donorName: string
   email: string
   phone: string

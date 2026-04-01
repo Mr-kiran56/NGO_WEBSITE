@@ -25,7 +25,7 @@ adminSchema.pre('save', async function () {
 })
 
 // Instance method: compare password
-adminSchema.methods.comparePassword = async function (candidate: string): Promise<boolean> {
+adminSchema.methods.comparePassword = async function (this: IAdmin, candidate: string): Promise<boolean> {
   return bcrypt.compare(candidate, this.password)
 }
 
