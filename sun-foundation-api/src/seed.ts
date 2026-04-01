@@ -27,7 +27,7 @@ const eventsData = [
     date: new Date('2024-12-15T08:00:00.000Z'),
     endDate: new Date('2024-12-15T17:00:00.000Z'),
     location: 'Cubbon Park, Bengaluru',
-    category: 'Environment',
+    category: 'environment',
     status: 'upcoming',
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/events/tree-plantation.jpg',
@@ -44,7 +44,7 @@ const eventsData = [
     date: new Date('2024-12-22T09:00:00.000Z'),
     endDate: new Date('2024-12-22T16:00:00.000Z'),
     location: 'SUN Foundation Community Hall, Koramangala',
-    category: 'Health',
+    category: 'health',
     status: 'upcoming',
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/events/health-camp.jpg',
@@ -60,7 +60,7 @@ const eventsData = [
     date: new Date('2024-06-10T10:00:00.000Z'),
     endDate: new Date('2024-06-10T15:00:00.000Z'),
     location: 'Town Hall, Mysuru',
-    category: 'Education',
+    category: 'education',
     status: 'past',
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/events/education-fair.jpg',
@@ -101,7 +101,7 @@ const blogsData = [
     `.trim(),
     author: 'Priya Nair',
     authorBio: 'Environmental Programme Lead at SUN Foundation',
-    category: 'Environment',
+    category: 'environment',
     tags: ['plantation', 'monsoon', 'green', 'environment', 'impact'],
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/blog/tree-plantation-cover.jpg',
@@ -146,7 +146,7 @@ const blogsData = [
     `.trim(),
     author: 'Arjun Sharma',
     authorBio: 'Education Programme Coordinator at SUN Foundation',
-    category: 'Education',
+    category: 'education',
     tags: ['education', 'children', 'school', 'impact', 'kits'],
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/blog/school-kits-cover.jpg',
@@ -165,7 +165,7 @@ const galleryData = [
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/gallery/tree-plantation-1.jpg',
     publicId: 'sun-foundation/gallery/tree-plantation-1',
-    category: 'Environment',
+    category: 'environment',
     isFeatured: true,
   },
   {
@@ -174,7 +174,7 @@ const galleryData = [
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/gallery/education-fair-1.jpg',
     publicId: 'sun-foundation/gallery/education-fair-1',
-    category: 'Education',
+    category: 'education',
     isFeatured: true,
   },
   {
@@ -183,7 +183,7 @@ const galleryData = [
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/gallery/health-camp-1.jpg',
     publicId: 'sun-foundation/gallery/health-camp-1',
-    category: 'Health',
+    category: 'health',
     isFeatured: false,
   },
   {
@@ -192,7 +192,7 @@ const galleryData = [
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/gallery/women-workshop-1.jpg',
     publicId: 'sun-foundation/gallery/women-workshop-1',
-    category: 'Women Empowerment',
+    category: 'women-empowerment',
     isFeatured: true,
   },
   {
@@ -201,7 +201,7 @@ const galleryData = [
     imageUrl:
       'https://res.cloudinary.com/demo/image/upload/v1/sun-foundation/gallery/flood-relief-1.jpg',
     publicId: 'sun-foundation/gallery/flood-relief-1',
-    category: 'Disaster Relief',
+    category: 'disaster-relief',
     isFeatured: false,
   },
 ]
