@@ -10,8 +10,9 @@ export async function connectDB(): Promise<void> {
 
   try {
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 15000,
       socketTimeoutMS: 45000,
+      connectTimeoutMS: 15000,
     })
     isConnected = true
     console.log('✅ MongoDB connected:', mongoose.connection.host)

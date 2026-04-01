@@ -7,8 +7,12 @@ import { verifyEmailConfig } from './config/email'
 const PORT = parseInt(process.env.PORT ?? '5000', 10)
 
 async function bootstrap(): Promise<void> {
-  // Connect to MongoDB
-  await connectDB()
+  // Connect to MongoDB (non-fatal on first boot — Render may need a moment)
+  try {
+    await connectDB()
+  } catch (err) {
+    console.error('⚠️  MongoDB initial connection failed — server will start anyway and retry on requests:', err)
+  }
 
   // Verify email configuration (non-fatal — logs warning if placeholder)
   await verifyEmailConfig()
