@@ -6,7 +6,7 @@ export const blogSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(200),
   excerpt: z.string().max(500).optional().default(''),
   content: z.string().optional().default(''),
-  featuredImage: z.string().url('Must be a valid URL').optional().or(z.literal('')).default(''),
+  featuredImage: z.string().optional().default(''),
   category: z.enum(BLOG_CATEGORIES).default('General'),
   tags: z.array(z.string().max(30)).max(10).optional().default([]),
   author: z.string().max(100).optional().default('SUN Foundation Team'),

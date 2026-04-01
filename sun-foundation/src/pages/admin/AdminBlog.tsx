@@ -106,8 +106,9 @@ export default function AdminBlog() {
       }
       setEditorOpen(false)
       fetchPosts()
-    } catch {
-      toast.error('Failed to save post')
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+      toast.error(msg || 'Failed to save post')
     } finally {
       setSaving(false)
     }
